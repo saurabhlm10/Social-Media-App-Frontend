@@ -12,12 +12,13 @@ function App() {
 
       <Route path='/' element={
         <>
-          <div className='flex flex-row justify-between w-full border-2 '>
-            {/* <h1>LOGO</h1> */}
             <Sidebar/>
-            < div className='pt-4' >
+          <div className='flex flex-row justify-center w-full border-2 '>
+            <div className='pt-4' >
             <Posts />
             </div>
+          </div>
+          <div className='fixed top-0 right-0'>
             <h1>PROFILE</h1>
           </div>
         </>

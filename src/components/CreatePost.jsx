@@ -1,33 +1,60 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 
 const CreatePost = () => {
     const [loadedFileUrl, setLoadedFileUrl] = useState(null)
+    const [currentImage, setCurrentImage] = useState(null)
+    const fileRef = useRef()
 
     const loadFile = (e) => {
-        // setLoadedFileUrl(URL.createObjectURL(e.target.files[0]))
+        setCurrentImage(e.target.files[0])
+        setLoadedFileUrl(URL.createObjectURL(e.target.files[0]))
+    }
 
-        console.log(loadedFileUrl)
+    const deleteImage = (e) => {
+        setCurrentImage(null)
+        setLoadedFileUrl(null)
     }
 
     return (
         <div className='flex flex-row justify-center '>
-            <div className='flex flex-col'>
-                {!loadedFileUrl ? (
+            <div className='flex flex-col pt-8 items-center'>
+                {loadedFileUrl ? (
+                    <div className='relative group'>
+                    <img
+                        src={loadedFileUrl}
+                        className='w-[600px]'
+                    />
+                    <div className=' absolute top-2 right-2 hidden cursor-pointer border-2 border-white bg-black h-8 w-8 group-hover:flex flex-row justify-center items-center rounded-full'>
+                        <span className="material-symbols-outlined  text-white"
+                            onClick={(e) => deleteImage(e)}
+                        >
+                            delete
+                        </span>
+                    </div>
+                </div>
+                ) : (
                     <>
-                        <input type="file" id="imageInput" name="filename" accept='images/*' onChange={(e) => loadFile(e)}
+                        <input type="file" ref={fileRef} id="imageInput" name="filename" accept='images/*' onChange={(e) => loadFile(e)}
                             className='hidden'
                         />
-                        <p><label htmlFor="imageInput">Upload Image</label></p>
+                        <div
+                            className=' flex flex-row justify-center items-center'
+                        ><label htmlFor="imageInput"
+                            className='border-4 border-slate-300 p-52 rounded-[12px] cursor-pointer text-lg flex flex-col items-center'
+                        >
+                                <i className="material-icons text-3xl">add_a_photo</i>
+                                Upload Image
+                            </label></div>
                     </>
-                ) : (
-                    <img src={loadedFileUrl} />
+                    
                 )}
-                <input type="text" />
-                <input type="text" />
+                <button
+                    onClick={() => console.log(imageInput.files)}
+                    className='border-2 py-2 px-4 w-28 mt-6 bg-cyan-900 text-white rounded-[15px]'
+                >
+                    Add Post
+                </button>
             </div>
-            <button
-                onClick={() => console.log(imageInput.files)}
-                className='border-2 '>Add Post</button>
         </div>
     )
 }
