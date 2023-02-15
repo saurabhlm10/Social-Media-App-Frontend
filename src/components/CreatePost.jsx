@@ -1,10 +1,12 @@
 import { useState, useRef } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router'
 
 const CreatePost = () => {
     const [loadedFileUrl, setLoadedFileUrl] = useState(null)
     const [currentImage, setCurrentImage] = useState(null)
     const fileRef = useRef()
+    const navigate = useNavigate()
 
     const loadFile = (e) => {
         setCurrentImage(e.target.files[0])
@@ -27,6 +29,9 @@ const CreatePost = () => {
             )
 
             console.log(response);
+
+            navigate(`/u/${response.data.post._id}`)
+
         } catch (error) {
             console.log(error)
         }
