@@ -9,11 +9,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@reduxjs/toolkit": "^1.9.2",
     "axios": "^1.2.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
+=======
+    "axios": "^1.2.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+>>>>>>> 900e9b71dfaf0f0e4b8d8132e739763ba44d70ef
     "react-router": "^6.7.0",
     "react-router-dom": "^6.7.0"
   },
