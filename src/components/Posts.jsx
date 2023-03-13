@@ -1,43 +1,46 @@
-import { useState, useEffect } from "react"
-import axios from 'axios'
-import { Link } from "react-router-dom"
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { mainState } from "../features/mainSlice";
+import { useSelector } from "react-redux";
+import { getFromAPI } from "../utils/getFromAPI";
 
 const Posts = () => {
-  const [images, setImages] = useState([])
+  const [images, setImages] = useState([]);
+
+  const { user } = useSelector(mainState);
 
   const getPosts = async () => {
     try {
-      const response = await axios.get('/api/getposts')
+      if (user.following.length !== 0) {
+        const response = await getFromAPI(`/api/getposts/${user.following}`);
 
-      const data = response.data.posts
-
-      setImages([...response.data.posts])
-      
+        setImages([...response.data.posts]);
+      }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
-    getPosts()
-  }, [])
-  
+    getPosts();
+  }, []);
 
   return (
-    <div className='flex flex-col gap-4'>
-      {images.map((image, id) => 
-      (
-        <Link to={`/u/${image._id}`} key={id}>
-        <div >
-            <img  src={image.imageUrl} className='w-[500px]' />
+    <div className="flex flex-col gap-8 	">
+      {images.map((image, id) => (
+        <div key={id}>
+          <Link to={`/${image.username}`}>
+            <b>{image.username}</b>
+          </Link>
+          <Link to={`/u/${image._id}`}>
+            <div className="border-r-2 border-gray-100">
+              <img src={image.imageUrl} className="w-[500px] mt-4" />
+            </div>
+          </Link>
         </div>
-      </Link>
-      )
-      )
-      }
-
+      ))}
     </div>
-  )
-}
+  );
+};
 
-export default Posts
+export default Posts;

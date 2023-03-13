@@ -1,12 +1,17 @@
 import { useState, useRef } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router'
+import Cookies from 'js-cookie'
+import { useSelector } from 'react-redux'
+import { postToAPI } from '../utils/postToAPI'
 
 const CreatePost = () => {
     const [loadedFileUrl, setLoadedFileUrl] = useState(null)
     const [currentImage, setCurrentImage] = useState(null)
     const fileRef = useRef()
     const navigate = useNavigate()
+
+    const {user} = useSelector((state) => state.main)
 
     const loadFile = (e) => {
         setCurrentImage(e.target.files[0])
@@ -20,13 +25,19 @@ const CreatePost = () => {
 
     const addPost = async () => {
         try {
+            const userId = Cookies.get('userId')
+            const username = user.username
+
             const formData = new FormData();
             formData.append("image", currentImage)
+            formData.append("userId", userId)
+            formData.append("username", username)
 
-            const response = await axios.post('/api/addpost', 
-            formData,
-            { headers: {'Content-Type': 'multipart/form-data'}}
-            )
+            const headers ={
+                'Content-Type': 'multipart/form-data'
+            }
+
+            const response = await postToAPI('/api/addpost', formData, headers )
 
             navigate(`/u/${response.data.post._id}`)
 

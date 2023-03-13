@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from "react-redux"
-import { turnOnLoading, turnOffLoading } from '../features/mainSlice'
-import axios from 'axios'
-
+import { turnOnLogin, turnOnLoading, turnOffLoading, setUser, turnOffFollowLoader } from '../features/mainSlice'
+import Cookies from 'js-cookie'
+import { postToAPI } from '../utils/postToAPI'
 
 
 const Login = () => {
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
+    const [username, setUsername] = useState('saurabh25')
+    const [password, setPassword] = useState('12345678')
     const [invalidInputArray, setInvalidInputArray] = useState([]);
     const [usernameErrorMessage, setUsernameErrorMessage] = useState('default')
     const [passwordErrorMessage, setPasswordErrorMessage] = useState('default')
@@ -17,13 +17,6 @@ const Login = () => {
     const dispatch = useDispatch()
 
     const { isLoading } = useSelector((state) => state.main)
-
-    
-    function returnFromHere() {
-        return console.log("Returning...")
-    }
-
-
 
     const onLogin = async () => {
 
@@ -60,7 +53,7 @@ const Login = () => {
 
 
         } catch (error) {
-            console.log("hello", error)
+            console.log("error", error)
         }
 
 
@@ -71,13 +64,23 @@ const Login = () => {
                 password
             }
 
-            const response = await axios.post('/api/loginuser', accountInfo)
+            const response = await postToAPI('/api/loginuser', accountInfo)
 
-            console.log(response)
+            // console.log(response)
+
+            Cookies.set('jwt_token', response.data.token, {expires: 1})
+            Cookies.set('userId', response.data.user._id, {expires: 1})
+            Cookies.set('username', response.data.user.username, {expires: 1})
 
             navigate('/')
 
+            console.log(response.data.user)
+
+            dispatch(setUser(response.data.user))
+
+            dispatch(turnOnLogin())
             dispatch(turnOffLoading())
+
 
         } catch (error) {
             dispatch(turnOffLoading())
@@ -112,7 +115,7 @@ const Login = () => {
                         type="text" placeholder='Username'
                         value={username}
                         onChange={(e) => {
-                            setUsername(e.target.value)
+                            setUsername(e.target.value.toLowerCase())
                             const tempIncompleteInputArray = invalidInputArray.filter((arrItem) => arrItem != 'username')
                             setInvalidInputArray([...tempIncompleteInputArray])
                         }

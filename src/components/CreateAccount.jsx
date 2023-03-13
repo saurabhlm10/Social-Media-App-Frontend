@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import axios from 'axios'
 import {Link, useNavigate} from 'react-router-dom'
 import { useSelector, useDispatch } from "react-redux"
-import { turnOnLoading, turnOffLoading } from '../features/mainSlice'
+import { turnOnLogin, turnOnLoading, turnOffLoading, setUser } from '../features/mainSlice'
+import Cookies from 'js-cookie'
+import { postToAPI } from '../utils/postToAPI'
 
 
 const CreateUser = () => {
@@ -17,9 +18,8 @@ const CreateUser = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const { isLoading } = useSelector((state) => state.main)
-
     const onCreateAccount = async () => {
+
         dispatch(turnOnLoading())
 
         let err = [...invalidInputArray]
@@ -59,7 +59,7 @@ const CreateUser = () => {
                 return dispatch(turnOffLoading())
             }
 
-        try {
+            try {
 
 
             const accountInfo = {
@@ -68,19 +68,27 @@ const CreateUser = () => {
                 password
             }
 
-            const response = await axios.post('/api/createuser', accountInfo)
+            const response = await postToAPI('/api/createuser', accountInfo)
+
+            Cookies.set('jwt_token', response.data.token, {expires: 1})
+            Cookies.set('userId', response.data._id, {expires: 1})
+            Cookies.set('username', response.data.username, {expires: 1})
+
+            
+            dispatch(setUser(response.data))
 
             navigate('/')
-            
+
+            dispatch(turnOnLogin())
             dispatch(turnOffLoading())
 
 
 
         } catch (error) {
+            
             dispatch(turnOffLoading())
 
-
-            switch (error.response.data.code) {
+            switch (error.response?.data.code) {
                 case '402':
                     setInvalidInputArray((prev) => [...prev, 'email'])
 
