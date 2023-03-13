@@ -14,8 +14,8 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { getFromAPI } from "../utils/getFromAPI";
 
 import { Oval } from "react-loader-spinner";
-import { postToAPI } from "../utils/postToAPI";
 import { putToAPI } from "../utils/putToAPI";
+import { useLocation } from "react-router-dom";
 
 const Profile = () => {
   const { followLoader, user, tempUser } = useSelector(mainState);
@@ -31,6 +31,8 @@ const Profile = () => {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
+
+  const location = useLocation()
 
   const onFollow = async () => {
     try {
@@ -64,10 +66,9 @@ const Profile = () => {
     try {
       const response = await getFromAPI(`/api/getuser/${username}`)
 
-      // console.log(response)
-
       dispatch(setTempUser(response.data));
-      getUserPosts(tempUser.username)
+
+      getUserPosts(response.data.username)
 
     } catch (error) {
       console.log(error);
@@ -76,7 +77,6 @@ const Profile = () => {
 
   const getUserPosts = async (username) => {
     try {
-
       const response = await getFromAPI(`/api/getuserposts/${username}`)
 
       setPosts([...response.data.posts]);
