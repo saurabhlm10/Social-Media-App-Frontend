@@ -23,6 +23,8 @@ const Login = () => {
 
   const onLogin = async () => {
     try {
+
+      console.log('run')
       let err = [...invalidInputArray];
 
       dispatch(turnOnLoading());
@@ -58,6 +60,7 @@ const Login = () => {
       };
 
       const response = await postToAPI("/api/loginuser", accountInfo);
+
 
       Cookies.set("jwt_token", response.data.token, { expires: 1 });
       Cookies.set("userId", response.data.user._id, { expires: 1 });

@@ -11,13 +11,16 @@ import { useSelector, useDispatch } from "react-redux";
 import Login from "./components/Login";
 import Cookies from "js-cookie";
 import { turnOnLogin, setUser } from "./features/mainSlice";
-import axios from "axios";
 import Profile from "./components/Profile";
+import { mainState } from "./features/mainSlice";
+
+import DeleteModal from "./components/DeleteModal";
 
 function App() {
-  const { isLoggedIn, isLoading, user } = useSelector((state) => state.main);
+  const { isLoggedIn, isLoading, user, deleteModalOpen } = useSelector(mainState);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
 
   const checkLogin = () => {
     if (
@@ -61,6 +64,7 @@ function App() {
         element={
           <>
             <div>
+
               <Link to="/">
                 <div className="mt-4 ml-4 absolute text-3xl">LOGO</div>
               </Link>
@@ -73,6 +77,11 @@ function App() {
         path="/u/:postId"
         element={
           <>
+
+          <div className="">
+
+            {deleteModalOpen && <DeleteModal/>}
+          </div>
             <Link to="/">
               <div className="mt-4 ml-4 absolute text-3xl">LOGO</div>
             </Link>

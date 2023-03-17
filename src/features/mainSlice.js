@@ -4,6 +4,7 @@ const initialState = {
   isLoggedIn: false,
   isLoading: false,
   followLoader: false,
+  deleteModalOpen: false,
   user: {},
   tempUser: {},
 }
@@ -36,11 +37,17 @@ export const mainSlice = createSlice({
     turnOffFollowLoader: (state) => {
       if(state.followLoader === true) state.followLoader = false
     },
+    turnOnDeleteModal: (state) => {
+      if(state.deleteModalOpen === false) state.deleteModalOpen = true
+    },
+    turnOffDeleteModal: (state) => {
+      if(state.deleteModalOpen === true) state.deleteModalOpen = false
+    },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { turnOnLoading, turnOffLoading, turnOnLogin, turnOffLogin, setUser, setTempUser, turnOnFollowLoader,turnOffFollowLoader, turnOnCheckFollow, turnOffCheckFollow } = mainSlice.actions
+export const { turnOnLoading, turnOffLoading, turnOnLogin, turnOffLogin, setUser, setTempUser, turnOnFollowLoader,turnOffFollowLoader, turnOnCheckFollow, turnOffCheckFollow, turnOnDeleteModal, turnOffDeleteModal } = mainSlice.actions
 
 export default mainSlice.reducer
 

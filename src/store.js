@@ -11,9 +11,6 @@ import storage from 'redux-persist/lib/storage' // defaults to localStorage for 
 
 import mainReducer from './features/mainSlice'
 
-
-
-
 const persistConfig = {
   key: 'root',
   version: 0,
