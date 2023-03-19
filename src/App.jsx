@@ -17,10 +17,10 @@ import { mainState } from "./features/mainSlice";
 import DeleteModal from "./components/DeleteModal";
 
 function App() {
-  const { isLoggedIn, isLoading, user, deleteModalOpen } = useSelector(mainState);
+  const { isLoggedIn, isLoading, user, deleteModalOpen } =
+    useSelector(mainState);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
 
   const checkLogin = () => {
     if (
@@ -45,14 +45,22 @@ function App() {
         element={
           <>
             <Sidebar />
-            <div className="flex flex-row justify-center w-full border-2 ">
+            <div className="flex flex-row justify-center w-full ">
               <div className="pt-4">
                 <Posts />
               </div>
             </div>
-            <div className="fixed top-0 right-0">
-              <Link to={`/${user?.username}`}>
-                <h1>PROFILE</h1>
+            <div className="fixed top-2 right-2">
+                <Link
+                  to={`/${user?.username}`}
+                  class="relative  inline-flex rounded-full group overflow-hidden bg-[#4CADDA] text-purple-600 inline-block"
+                >
+                  <span class=" absolute inline-flex top-0 left-0 flex w-full h-0 mb-0 transition-all duration-300 ease-out transform translate-y-0 bg-purple-600 group-hover:h-full opacity-90"></span>
+                  <span class="relative inline-flex group-hover:text-white">
+                    <span class="inline-flex material-symbols-outlined text-white  text-6xl">
+                      account_circle
+                    </span>
+                  </span>
               </Link>
             </div>
           </>
@@ -64,7 +72,6 @@ function App() {
         element={
           <>
             <div>
-
               <Link to="/">
                 <div className="mt-4 ml-4 absolute text-3xl">LOGO</div>
               </Link>
@@ -77,11 +84,7 @@ function App() {
         path="/u/:postId"
         element={
           <>
-
-          <div className="">
-
-            {deleteModalOpen && <DeleteModal/>}
-          </div>
+            <div className="">{deleteModalOpen && <DeleteModal />}</div>
             <Link to="/">
               <div className="mt-4 ml-4 absolute text-3xl">LOGO</div>
             </Link>

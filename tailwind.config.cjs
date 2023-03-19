@@ -4,7 +4,14 @@ module.exports = {
     "./index.html", 
     "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
+    fontFamily: {
+      display:["Source Sans Pro", "sans-serif"],
+      head: ['Open Sans', "sans-serif"]
+    },
     extend: {},
   },
-  plugins: [],
+  daisyui: {
+    themes: false,
+  },
+  plugins: [require("daisyui")],
 };

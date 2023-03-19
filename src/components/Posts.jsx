@@ -33,7 +33,7 @@ const Posts = () => {
             <b>{image.username}</b>
           </Link>
           <Link to={`/u/${image._id}`}>
-            <div className="border-r-2 border-gray-100">
+            <div className="border-r-2 border-l-2 border-gray-100">
               <img src={image.imageUrl} className="w-[500px] mt-4" />
             </div>
           </Link>
