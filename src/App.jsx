@@ -25,7 +25,7 @@ function App() {
   const checkLogin = () => {
     if (
       Cookies.get("jwt_token") === undefined &&
-      location.pathname !== "/register"
+      location.pathname !== "/u/createaccount"
     ) {
       navigate("/u/login");
     } else {
@@ -53,11 +53,11 @@ function App() {
             <div className="fixed top-2 right-2">
                 <Link
                   to={`/${user?.username}`}
-                  class="relative  inline-flex rounded-full group overflow-hidden bg-[#4CADDA] text-purple-600 inline-block"
+                  className="relative  inline-flex rounded-full group overflow-hidden bg-[#4CADDA] text-purple-600 inline-block"
                 >
-                  <span class=" absolute inline-flex top-0 left-0 flex w-full h-0 mb-0 transition-all duration-300 ease-out transform translate-y-0 bg-purple-600 group-hover:h-full opacity-90"></span>
-                  <span class="relative inline-flex group-hover:text-white">
-                    <span class="inline-flex material-symbols-outlined text-white  text-6xl">
+                  <span className=" absolute inline-flex top-0 left-0 flex w-full h-0 mb-0 transition-all duration-300 ease-out transform translate-y-0 bg-purple-600 group-hover:h-full opacity-90"></span>
+                  <span className="relative inline-flex group-hover:text-white">
+                    <span className="inline-flex material-symbols-outlined text-white  text-6xl">
                       account_circle
                     </span>
                   </span>
@@ -96,13 +96,13 @@ function App() {
         path="/u/createaccount"
         element={
           <>
-            {isLoading && (
+            {/* {isLoading && (
               <div className="full-screen-loading-background">
                 <div className="pos-center">
                   <Spinner />
                 </div>
               </div>
-            )}
+            )} */}
             <CreateUser />
           </>
         }

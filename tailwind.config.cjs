@@ -2,16 +2,15 @@
 module.exports = {
   content: [
     "./index.html", 
-    "./src/**/*.{js,ts,jsx,tsx}"],
+    "./src/**/*.{js,ts,jsx,tsx}",
+    "./src/**/*.{html,js}",
+  ],
   theme: {
     fontFamily: {
+      head: ['Open Sans', "sans-serif"],
       display:["Source Sans Pro", "sans-serif"],
-      head: ['Open Sans', "sans-serif"]
     },
     extend: {},
   },
-  daisyui: {
-    themes: false,
-  },
-  plugins: [require("daisyui")],
+  plugins: [],
 };

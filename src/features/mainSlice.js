@@ -5,6 +5,7 @@ const initialState = {
   isLoading: false,
   followLoader: false,
   deleteModalOpen: false,
+  showCheckmark: false,
   user: {},
   tempUser: {},
 }
@@ -13,6 +14,12 @@ export const mainSlice = createSlice({
   name: 'main',
   initialState,
   reducers: {
+    turnOnShowCheckmark: (state) => {
+      state.showCheckmark = true
+    },
+    turnOffShowCheckmark: (state) => {
+      state.showCheckmark = false
+    },
     turnOnLoading: (state) => {
       state.isLoading = true
     },
@@ -47,7 +54,7 @@ export const mainSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { turnOnLoading, turnOffLoading, turnOnLogin, turnOffLogin, setUser, setTempUser, turnOnFollowLoader,turnOffFollowLoader, turnOnCheckFollow, turnOffCheckFollow, turnOnDeleteModal, turnOffDeleteModal } = mainSlice.actions
+export const { turnOnLoading, turnOffLoading, turnOnLogin, turnOffLogin, setUser, setTempUser, turnOnFollowLoader,turnOffFollowLoader, turnOnCheckFollow, turnOffCheckFollow, turnOnDeleteModal, turnOffDeleteModal, turnOnShowCheckmark, turnOffShowCheckmark } = mainSlice.actions
 
 export default mainSlice.reducer
 

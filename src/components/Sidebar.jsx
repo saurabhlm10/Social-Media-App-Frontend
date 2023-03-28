@@ -5,7 +5,7 @@ const Sidebar = () => {
   return (
     <div className="font-display bg-gradient-to-br from-[#4CADDA] to-[#afe3f2] pt-12 px-6 h-screen fixed top-0 left-0        ">
       <h1 className="mt-4 text-xl font-head font-bold text-white">LOGO</h1>
-      <Link to="/createpost">
+      {/* <Link to="/createpost"> */}
         <Link to="/createpost" className="mt-12 relative inline-block text-lg group">
           <span className="relative z-10 block px-5 py-3 overflow-hidden font-bold leading-tight text-white transition-colors duration-300 ease-out border-2 border-white rounded-lg group-hover:text-white">
             <span className="absolute inset-0 w-full h-full px-5 py-3 rounded-lg bg-blue-500"></span>
@@ -17,7 +17,7 @@ const Sidebar = () => {
             data-rounded="rounded-lg"
           ></span>
         </Link>
-      </Link>
+      {/* </Link> */}
     </div>
   );
 };
