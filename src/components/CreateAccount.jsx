@@ -161,17 +161,16 @@ const CreateUser = () => {
     >
       {/* Form  */}
       <div
-        className="flex flex-col gap-[2px]  px-8 pt-8 pb-4 rounded-2xl shadow-xl  bg-white backdrop-blur 
-      bg-gradient-to-br from-white via-blue-50 to-[#e9fffc]
-      bg-white
-      "
+        className="flex flex-col gap-[2px] px-8 pt-8 pb-4 rounded-2xl shadow-xl backdrop-blur 
+      bg-gradient-to-br from-white via-blue-50 to-[#e9fffc]"
       >
+
         {/* Logo  */}
         <h1 className="font-bold font-head text-center text-4xl ">LOGO</h1>
 
         {/* Username Input Field  */}
         <div
-          className="mt-6 relative w-full xl:w-96  "
+          className="mt-6 relative"
           data-te-input-wrapper-init
         >
           <input
@@ -208,7 +207,7 @@ const CreateUser = () => {
         </div>
 
         {/* Email Input Field  */}
-        <div className="relative xl:w-96 mt-2" data-te-input-wrapper-init>
+        <div className="relative mt-2" data-te-input-wrapper-init>
           <input
             className="h-[40px] w-[450px] p-2  peer block min-h-[auto] rounded border-2 border-[#afe3f2]  bg-transparent py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none text-black [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
             id="emailFormControlInput"
@@ -244,7 +243,7 @@ const CreateUser = () => {
         </div>
 
         {/* Password Input Field  */}
-        <div className="relative xl:w-96 mt-2" data-te-input-wrapper-init>
+        <div className="relative mt-2" data-te-input-wrapper-init>
           <input
             className=" h-[40px] w-[450px] p-2  peer block min-h-[auto] rounded border-2 border-[#afe3f2]  bg-transparent py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none text-black [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
             id="passwordFormControlInput"
