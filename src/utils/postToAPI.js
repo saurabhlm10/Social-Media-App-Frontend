@@ -2,6 +2,8 @@ import axios from "axios"
 import Cookies from "js-cookie";
 
 export const postToAPI = async (query, info, headers) => {
+
+    console.log('postToAPI')
     let response;
 
     let token;

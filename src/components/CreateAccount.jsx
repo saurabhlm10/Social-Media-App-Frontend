@@ -132,6 +132,8 @@ const CreateUser = () => {
         navigate("/");
         dispatch(turnOffShowCheckmark());
       }, 1500);
+
+      
     } catch (error) {
       dispatch(turnOffLoading());
 
