@@ -36,9 +36,6 @@ const Login = () => {
       const checkUsername = username.trim();
       const checkPassword = password.trim();
 
-      console.log(checkUsername + 'checkUsername')
-      console.log(checkPassword + 'checkPassword')
-
       setUsername(checkUsername);
       setPassword(checkPassword);
 
@@ -82,21 +79,12 @@ const Login = () => {
         return dispatch(turnOffLoading());
       }
     
-    console.log('error end')
 
     try {
-      console.log('pre object')
-
-      console.log(checkUsername + 'checkUsername')
-      console.log(checkPassword + 'checkPassword')
-
       const accountInfo = {
         username: checkUsername,
         password: checkPassword
       };
-
-
-      console.log('accountInfo', accountInfo)
 
       const response = await postToAPI("/api/loginuser", accountInfo);
 
@@ -311,7 +299,7 @@ const Login = () => {
           <Link
             to="/u/createaccount"
             className="text-cyan-700"
-            disabled={isLoading}
+            disabled={isLoading || showCheckmark}
           >
             Create An Account
           </Link>

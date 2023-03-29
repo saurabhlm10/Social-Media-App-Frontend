@@ -359,7 +359,7 @@ const CreateUser = () => {
           } text-center mt-4`}
         >
           Already have an account? &nbsp;
-          <Link to="/u/login" className="text-cyan-700" disabled={isLoading}>
+          <Link to="/u/login" className="text-cyan-700" disabled={isLoading|| showCheckmark}>
             Login here.
           </Link>
         </p>

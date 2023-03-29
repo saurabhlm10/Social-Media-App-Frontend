@@ -17,7 +17,7 @@ import { mainState } from "./features/mainSlice";
 import DeleteModal from "./components/DeleteModal";
 
 function App() {
-  const { isLoggedIn, isLoading, user, deleteModalOpen } =
+  const { isLoggedIn, isLoading, user, deleteModalOpen, showCheckmark } =
     useSelector(mainState);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -51,16 +51,16 @@ function App() {
               </div>
             </div>
             <div className="fixed top-2 right-2">
-                <Link
-                  to={`/${user?.username}`}
-                  className="relative  inline-flex rounded-full group overflow-hidden bg-[#4CADDA] text-purple-600 inline-block"
-                >
-                  <span className=" absolute inline-flex top-0 left-0 flex w-full h-0 mb-0 transition-all duration-300 ease-out transform translate-y-0 bg-purple-600 group-hover:h-full opacity-90"></span>
-                  <span className="relative inline-flex group-hover:text-white">
-                    <span className="inline-flex material-symbols-outlined text-white  text-6xl">
-                      account_circle
-                    </span>
+              <Link
+                to={`/${user?.username}`}
+                className="relative  inline-flex rounded-full group overflow-hidden bg-[#4CADDA] text-purple-600"
+              >
+                <span className=" absolute inline-flex top-0 left-0  w-full h-0 mb-0 transition-all duration-300 ease-out transform translate-y-0 bg-purple-600 group-hover:h-full opacity-90 border-black"></span>
+                <span className="relative inline-flex group-hover:text-white">
+                  <span className="inline-flex material-symbols-outlined text-white  text-6xl ">
+                    account_circle
                   </span>
+                </span>
               </Link>
             </div>
           </>
@@ -72,8 +72,10 @@ function App() {
         element={
           <>
             <div>
-              <Link to="/">
-                <div className="font-head font-bold mt-4 ml-4 absolute text-3xl">LOGO</div>
+              <Link to="/" disabled={isLoading || showCheckmark}>
+                <div className="font-head font-bold mt-4 ml-4 absolute text-3xl">
+                  LOGO
+                </div>
               </Link>
               <CreatePost />
             </div>
@@ -96,13 +98,6 @@ function App() {
         path="/u/createaccount"
         element={
           <>
-            {/* {isLoading && (
-              <div className="full-screen-loading-background">
-                <div className="pos-center">
-                  <Spinner />
-                </div>
-              </div>
-            )} */}
             <CreateUser />
           </>
         }
