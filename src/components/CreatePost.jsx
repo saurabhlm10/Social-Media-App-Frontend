@@ -61,8 +61,8 @@ const CreatePost = () => {
       <div className="flex flex-col pt-4 items-center">
         <p className={`text-red-300 text-sm mb-1 ${invalidInput ? "block" : "invisible"}`}>Please add a file</p>
         {loadedFileUrl ? (
-          <div className="relative flex items-center w-[450px] h-[450px] shadow group">
-            <img src={loadedFileUrl} className="w-full" />
+          <div className="relative flex justify-center items-center w-[450px] h-[450px] shadow group">
+            <img src={loadedFileUrl} className="object-contain w-full h-full" />
             <div className=" absolute top-2 right-2 flex opacity-0 cursor-pointer border-2 hover:border-[#4CADDA] border-white bg-[#58c1de] h-8 w-8 group-hover:opacity-100 flex-row justify-center items-center rounded-full transition-all duration-150 ease-in hover:bg-[#4CADDA]">
               <span
                 className="material-symbols-outlined text-white"
