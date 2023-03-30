@@ -43,10 +43,6 @@ const CreateUser = () => {
     setEmail(checkEmail);
     setPassword(checkPassword);
 
-    console.log(username + "Username");
-    console.log(email + "Email");
-    console.log(password + "password");
-
     let err = [...invalidInputArray];
 
     // check if any field is missing or is invalid
