@@ -86,7 +86,8 @@ function App() {
         path="/u/:postId"
         element={
           <>
-            <div className="">{deleteModalOpen && <DeleteModal />}</div>
+            {deleteModalOpen && <DeleteModal />}
+            {/* <DeleteModal /> */}
             <Link to="/">
               <div className="mt-4 ml-4 absolute text-3xl">LOGO</div>
             </Link>
@@ -119,6 +120,7 @@ function App() {
       />
 
       <Route path={`/:username`} element={<Profile />} />
+      <Route path="/deletemodal" element={<DeleteModal/>}/>
     </Routes>
   );
 }

@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import {
@@ -19,7 +19,14 @@ const DeleteModal = ({ postId, post }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { isLoading, showCheckmark } = useSelector(mainState);
+  const modalRef = useRef();
+  const cancelButtonRef = useRef(null);
+  const confirmButtonRef = useRef(null);
+  const headingRef = useRef(null);
+
+  const pRef = useRef(null);
+
+  const { isLoading, showCheckmark, deleteModalOpen } = useSelector(mainState);
 
   const onDeletePost = async () => {
     try {
@@ -39,32 +46,74 @@ const DeleteModal = ({ postId, post }) => {
         }, 1000);
       }
     } catch (error) {
+      console.log(error);
+      dispatch(turnOffLoading());
       dispatch(turnOffDeleteModal());
     }
   };
 
+  useEffect(() => {
+    setTimeout(() => {
+      document.addEventListener("mousedown", handleClickOutside);
+    }, 0);
+
+    // Clean up event listener when component unmounts
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  function handleClickOutside(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    if (!modalRef.current) {
+      return;
+    } else if (cancelButtonRef.current.isEqualNode(e.target)) {
+      return;
+    } else if (
+      confirmButtonRef.current.contains(e.target) ||
+      confirmButtonRef.current.isEqualNode(e.target) ||
+      pRef.current.isEqualNode(e.target)
+    ) {
+      return;
+    } else if (
+      modalRef.current.isEqualNode(e.target) ||
+      headingRef.current.isEqualNode(e.target)
+    ) {
+      return;
+    } else {
+      dispatch(turnOffDeleteModal());
+    }
+  }
+
   return (
     <div className="modal-container font-display font-semibold ">
-      <div className="border-2 border-[#4CADDA] shadow-[#4CADDA] h-48 w-80 rounded-md flex flex-col items-center justify-between py-4 bg-white">
-        <h3>Are You Sure?</h3>
+      <div
+        className="border-2 border-[#4CADDA] shadow-[#4CADDA] h-48 w-80 rounded-md flex flex-col items-center justify-between py-4 bg-white"
+        ref={modalRef}
+      >
+        <h3 ref={headingRef}>Are You Sure?</h3>
         <div className="flex flex-row justify-between gap-[20px]">
           <button
-            className="text-black border-2 border-[#4CADDA] bg-white  rounded-full py-2 px-4 text-2xl"
+            className="h-12 w-28 text-black border-2 border-[#4CADDA] bg-white  rounded-full py-2 px-4 text-2xl flex flex-row justify-center items-center"
             onClick={() => {
               dispatch(turnOffDeleteModal());
             }}
             disabled={isLoading || showCheckmark}
+            ref={cancelButtonRef}
           >
             Cancel
           </button>
           <button
-            className={`h-12 w-28 text-white border-2 border-[#4CADDA] bg-[#4CADDA]  hover:text-black rounded-full text-2xl flex flex-row justify-center items-center ${
+            className={` h-12 w-28 text-white border-2 border-[#4CADDA] bg-[#4CADDA]  hover:text-black rounded-full text-2xl flex flex-row justify-center items-center ${
               isLoading || showCheckmark
                 ? "hover:bg-[#4CADDA]"
                 : "hover:bg-white"
             }`}
-            onClick={onDeletePost}
             disabled={isLoading || showCheckmark}
+            ref={confirmButtonRef}
+            onClick={onDeletePost}
           >
             <span className=" relative text-black group-hover:text-white font-display font-semibold">
               {isLoading || showCheckmark ? (
@@ -107,7 +156,9 @@ const DeleteModal = ({ postId, post }) => {
                   )}
                 </div>
               ) : (
-                <p>Confirm</p>
+                <p className="" ref={pRef}>
+                  Confirm
+                </p>
               )}
             </span>
           </button>

@@ -40,17 +40,15 @@ const Post = () => {
 
   return (
     <div className=" flex flex-col items-center">
-      {/* <div className=""> */}
-
       {deleteModalOpen && <DeleteModal postId={postId} post={post} />}
-      {/* </div> */}
       <div className=" mx-auto relative flex flex-row justify-center mt-8 group">
         <img src={imageUrl} className="w-[600px] " />
         {selfPost && (
           <div className=" absolute hidden top-2 right-2 cursor-pointer border-2 border-white bg-black h-8 w-8 group-hover:flex flex-row justify-center items-center rounded-full">
             <span
               className="material-symbols-outlined  text-white"
-              onClick={()=> {
+              onClick={(e)=> {
+                // e.stopPropagation();
                 dispatch(turnOnDeleteModal());
               }}
             >

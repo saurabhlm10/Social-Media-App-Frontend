@@ -30,7 +30,6 @@ const Login = () => {
   const dispatch = useDispatch();
 
   const onLogin = async () => {
-      console.log("run");
       dispatch(turnOnLoading());
 
       const checkUsername = username.trim();
