@@ -10,6 +10,6 @@ export const putToAPI = async (query) => {
         token: token
     }
     const response = await axios.put(query, data, {headers})
-    
+
     return response
 }

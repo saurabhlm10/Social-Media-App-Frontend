@@ -3,9 +3,10 @@ import { Link } from "react-router-dom";
 import { mainState } from "../features/mainSlice";
 import { useSelector } from "react-redux";
 import { getFromAPI } from "../utils/getFromAPI";
+import Post from "./Post";
 
 const Posts = () => {
-  const [images, setImages] = useState([]);
+  const [posts, setPosts] = useState([]);
 
   const { user } = useSelector(mainState);
 
@@ -14,7 +15,7 @@ const Posts = () => {
       if (user.following.length !== 0) {
         const response = await getFromAPI(`/api/getposts/${user.following}`);
 
-        setImages([...response.data.posts]);
+        setPosts([...response.data.posts]);
       }
     } catch (error) {
       console.log(error);
@@ -27,16 +28,16 @@ const Posts = () => {
 
   return (
     <div className="font-display flex flex-col gap-12 	">
-      {images.map((image, id) => (
+      {posts.map((post, id) => (
         <div key={id}>
-          <Link to={`/${image.username}`}>
-            <b>{image.username}</b>
+          <Link to={`/${post.username}`}>
+            <b>{post.username}</b>
           </Link>
-          <Link to={`/u/${image._id}`}>
+          
             <div className="border-r-2 border-l-2 border-gray-100">
-              <img src={image.imageUrl} className="w-[500px] mt-4" />
+              {/* <img src={image.imageUrl} className="w-[500px] mt-4" /> */}
+              <Post sentPost={post} key={id} />
             </div>
-          </Link>
         </div>
       ))}
     </div>
