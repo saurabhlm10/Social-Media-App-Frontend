@@ -16,7 +16,7 @@ const Post = () => {
 
   const dispatch = useDispatch();
 
-  const { deleteModalOpen } = useSelector(mainState);
+  const { isLoading, showCheckmark, deleteModalOpen } = useSelector(mainState);
 
   const getPost = async () => {
     try {
@@ -39,15 +39,20 @@ const Post = () => {
   }, []);
 
   return (
-    <div className=" flex flex-col items-center">
+    <div className="font-head flex flex-col items-center ">
       {deleteModalOpen && <DeleteModal postId={postId} post={post} />}
       <div className=" mx-auto relative flex flex-row justify-center mt-8 group">
         <img src={imageUrl} className="w-[600px] " />
         {selfPost && (
-          <div className=" absolute hidden top-2 right-2 cursor-pointer border-2 border-white bg-black h-8 w-8 group-hover:flex flex-row justify-center items-center rounded-full">
+          // <div className=" absolute hidden top-2 right-2 cursor-pointer border-2 border-white bg-black h-8 w-8 group-hover:flex flex-row justify-center items-center rounded-full">
+          <div
+            className={` absolute top-2 right-2 flex opacity-0 cursor-pointer border-2 hover:border-[#4CADDA] border-white bg-[#58c1de] h-8 w-8 group-hover:opacity-100 flex-row justify-center items-center rounded-full transition-all duration-150 ease-in hover:bg-[#4CADDA] ${
+              (isLoading || showCheckmark) && "hidden"
+            }`}
+          >
             <span
               className="material-symbols-outlined  text-white"
-              onClick={(e)=> {
+              onClick={(e) => {
                 // e.stopPropagation();
                 dispatch(turnOnDeleteModal());
               }}

@@ -26,7 +26,7 @@ const Posts = () => {
   }, []);
 
   return (
-    <div className="flex flex-col gap-8 	">
+    <div className="font-display flex flex-col gap-12 	">
       {images.map((image, id) => (
         <div key={id}>
           <Link to={`/${image.username}`}>

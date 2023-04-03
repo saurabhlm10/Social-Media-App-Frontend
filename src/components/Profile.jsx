@@ -113,9 +113,9 @@ const Profile = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center text-center">
+    <div className="font-display flex flex-col items-center text-center">
       <div>
-        <h1 className="text-2xl mt-4">{usernameCheck}</h1>
+        <h1 className="font-semibold text-2xl mt-4">{usernameCheck}</h1>
         <div className="flex flex-row gap-[50px] mt-6">
           {selfProfile ? (
             <>

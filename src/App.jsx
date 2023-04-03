@@ -89,7 +89,7 @@ function App() {
             {deleteModalOpen && <DeleteModal />}
             {/* <DeleteModal /> */}
             <Link to="/">
-              <div className="mt-4 ml-4 absolute text-3xl">LOGO</div>
+              <div className="font-head font-semibold mt-4 ml-4 absolute text-3xl">LOGO</div>
             </Link>
             <Post />
           </>
