@@ -320,7 +320,7 @@ const Post = ({ sentPost }) => {
                           comment.username !== user.username && "invisible"
                         } flex flex-row items-center justify-center`}
                         onClick={() => deleteComment(id, comment._id)}
-                        disabled={deleteCommentLoader.length > 0 && deleteCommentLoader.includes(id)}
+                        disabled={deleteCommentLoader && deleteCommentLoader.length > 0 && deleteCommentLoader.includes(id)}
                       >
                         {deleteCommentLoader.includes(id) ? (
                           <ColorRing
