@@ -322,7 +322,7 @@ const Post = ({ sentPost }) => {
                         onClick={() => deleteComment(id, comment._id)}
                         disabled={deleteCommentLoader && deleteCommentLoader.length > 0 && deleteCommentLoader.includes(id)}
                       >
-                        {deleteCommentLoader.includes(id) ? (
+                        {(deleteCommentLoader && deleteCommentLoader.length > 0 && deleteCommentLoader.includes(id)) ? (
                           <ColorRing
                             visible={true}
                             height="15"
