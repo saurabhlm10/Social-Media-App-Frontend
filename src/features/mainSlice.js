@@ -16,7 +16,11 @@ export const mainSlice = createSlice({
   initialState,
   reducers: {
     turnOnDeleteCommentLoader: (state, { payload }) => {
-      state.deleteCommentLoader = [...state.deleteCommentLoader, payload]
+      if(state.deleteCommentLoader.length === 0){
+        state.deleteCommentLoader = [payload]
+      } else{
+        state.deleteCommentLoader = [...state.deleteCommentLoader, payload]
+      }
     },
     turnOffDeleteCommentLoader: ({ deleteCommentLoader }, { payload }) => {
       let index = deleteCommentLoader.indexOf(payload);

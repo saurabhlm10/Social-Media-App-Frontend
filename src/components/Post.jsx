@@ -125,9 +125,9 @@ const Post = ({ sentPost }) => {
         `/api/deletecomment/${commentId}/${post._id}`
       );
 
-      return setTimeout(() => {
+      getPost();
+      setTimeout(() => {
         dispatch(turnOffDeleteCommentLoader(id));
-        getPost();
       }, 1000);
     } catch (error) {
       console.log(error);
