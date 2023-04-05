@@ -16,7 +16,7 @@ export const mainSlice = createSlice({
   initialState,
   reducers: {
     turnOnDeleteCommentLoader: (state, { payload }) => {
-      if(state.deleteCommentLoader.length === 0){
+      if(!state.deleteCommentLoader || state.deleteCommentLoader.length === 0){
         state.deleteCommentLoader = [payload]
       } else{
         state.deleteCommentLoader = [...state.deleteCommentLoader, payload]
