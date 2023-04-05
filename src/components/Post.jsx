@@ -1,15 +1,25 @@
 import Cookies from "js-cookie";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { getFromAPI } from "../utils/getFromAPI";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { mainState } from "../features/mainSlice";
-import { turnOnDeleteModal } from "../features/mainSlice";
+import {
+  mainState,
+  turnOffLoading,
+  turnOffShowCheckmark,
+  turnOnLoading,
+  turnOnDeleteModal,
+  turnOnShowCheckmark,
+  turnOnDeleteCommentLoader,
+  turnOffDeleteCommentLoader,
+} from "../features/mainSlice";
 import DeleteModal from "./DeleteModal";
 
 import "./post.css";
 import { putToAPI } from "../utils/putToAPI";
+import { postToAPI } from "../utils/postToAPI";
+import { ColorRing } from "react-loader-spinner";
+import { deleteFromAPI } from "../utils/deleteFromAPI";
 
 const Post = ({ sentPost }) => {
   const [imageUrl, setImageUrl] = useState("");
@@ -19,10 +29,23 @@ const Post = ({ sentPost }) => {
   const [likePostAction, setLikePostAction] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
 
+  const [isInputFocused, setIsInputFocused] = useState(false);
+
+  const [commentString, setCommentString] = useState("");
+
+  const [commentErrorMessage, setCommentErrorMessage] = useState("default");
+
+  const commentTextAreaRef = useRef();
+
   const dispatch = useDispatch();
 
-  const { isLoading, showCheckmark, deleteModalOpen, user } =
-    useSelector(mainState);
+  const {
+    isLoading,
+    showCheckmark,
+    deleteModalOpen,
+    user,
+    deleteCommentLoader,
+  } = useSelector(mainState);
 
   const getPost = async () => {
     try {
@@ -56,6 +79,61 @@ const Post = ({ sentPost }) => {
     }
   };
 
+  const addComment = async () => {
+    dispatch(turnOnLoading());
+
+    if (!commentString) {
+      setCommentErrorMessage("Please add a comment");
+      return dispatch(turnOffLoading());
+    }
+
+    try {
+      const info = {
+        comment: commentString,
+      };
+
+      const response = await postToAPI(
+        `/api/addcomment/${user.username}/${post._id}`,
+        info,
+        {}
+      );
+
+      getPost();
+
+      setCommentString("");
+
+      setIsInputFocused(false);
+
+      dispatch(turnOffLoading());
+      dispatch(turnOnShowCheckmark());
+
+      setTimeout(() => {
+        dispatch(turnOffShowCheckmark());
+      }, 1000);
+    } catch (error) {
+      dispatch(turnOffLoading());
+
+      console.log(error);
+    }
+  };
+
+  const deleteComment = async (id, commentId) => {
+    dispatch(turnOnDeleteCommentLoader(id));
+
+    try {
+      const response = await deleteFromAPI(
+        `/api/deletecomment/${commentId}/${post._id}`
+      );
+
+      return setTimeout(() => {
+        dispatch(turnOffDeleteCommentLoader(id));
+        getPost();
+      }, 1000);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getPost();
   }, []);
@@ -63,24 +141,23 @@ const Post = ({ sentPost }) => {
   return (
     <div className="font-head flex flex-col items-center ">
       {deleteModalOpen && <DeleteModal postId={postId} post={post} />}
-      <div className="box mx-auto relative flex flex-col justify-center mt-8 group">
+      <div
+        className={`mx-auto pb-20 relative flex flex-col justify-center pt-8 border-l-2 border-r-2 border-[#c4dfec] ${
+          sentPost ? "w-[450px]" : "w-[600px]"
+        } `}
+      >
         {sentPost ? (
           <Link to={`/u/${post._id}`}>
-            <img
-              src={imageUrl}
-              className="w-[450px]"
-            />
+            <img id="imageDiv" src={imageUrl} className="w-[450px]" />
           </Link>
         ) : (
-          <img
-            src={imageUrl}
-            className="w-[600px]"
-          />
+          <img src={imageUrl} className="w-[600px] peer" />
         )}
 
+        {/* Delete button if own post */}
         {selfPost && (
           <div
-            className={` absolute top-2 right-2 flex opacity-0 cursor-pointer border-2 hover:border-[#4CADDA] border-white bg-[#58c1de] h-8 w-8 group-hover:opacity-100 flex-row justify-center items-center rounded-full transition-all duration-150 ease-in hover:bg-[#4CADDA] ${
+            className={` absolute top-2 right-2 flex opacity-0 cursor-pointer border-2 hover:border-[#4CADDA] border-white bg-[#58c1de] h-8 w-8 peer-hover:opacity-100 hover:opacity-100 flex-row justify-center items-center rounded-full transition-all duration-150 ease-in hover:bg-[#4CADDA] ${
               (isLoading || showCheckmark) && "hidden"
             }`}
           >
@@ -114,13 +191,11 @@ const Post = ({ sentPost }) => {
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 1000 1000"
               className={` ${sentPost ? "h-8 w-10" : "h-10 w-12"}  ${
-                // className={` ${sentPost ? 'h-10 w-12' : 'h-10 w-12'}  ${
                 likePostAction && "scale-[1.17]"
               }  transform-all duration-75 ease-in-out 	`}
               fill={`${isLiked ? "#4CADDA" : "#ffffff"}`}
             >
               <path
-                // stroke={`${isLiked ? "#4CADDA": 'black'}`}
                 stroke={`${isLiked ? "#4CADDA" : "black"}`}
                 className="transform-all duration-50 ease-linear"
                 strokeWidth="45"
@@ -128,8 +203,152 @@ const Post = ({ sentPost }) => {
               />
             </svg>
           </button>
-          <button className="w-2/3 box">Comments</button>
         </div>
+        {!sentPost && (
+          <div className="pt-6 px-2 flex flex-col gap-1 ">
+            {/* Add Comment Section */}
+            <div className="flex flex-row justify-between">
+              {/* Comment Input fields */}
+
+              <div className=" w-3/4">
+                <textarea
+                  ref={commentTextAreaRef}
+                  id="inputTextArea"
+                  // placeholder="Add a comment"
+                  className={`${
+                    isInputFocused ? "h-20" : `h-8`
+                  } border-b-2 border-blue-500 w-full outline-none`}
+                  value={commentString}
+                  onChange={(e) => {
+                    setCommentString(e.target.value);
+                    setCommentErrorMessage("default");
+                  }}
+                  onFocus={() => {
+                    setIsInputFocused(true);
+                  }}
+                  onBlur={() => !commentString && setIsInputFocused(false)}
+                  placeholder="Add a comment"
+                />
+                <p
+                  className={`${
+                    commentErrorMessage !== "default" ? "block" : "invisible"
+                  } text-red-500 text-sm leading-3`}
+                >
+                  {commentErrorMessage}
+                </p>
+              </div>
+
+              {/* <button className="border-2 w-1/5 h-8">Add</button> */}
+              <button
+                className=" relative  h-10 w-24 font-medium group flex flex-row items-center justify-center "
+                onClick={addComment}
+                disabled={isLoading || showCheckmark}
+              >
+                <span
+                  className={`absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-[#4CADDA] group-hover:-translate-x-0 group-hover:-translate-y-0 ${
+                    (isLoading || showCheckmark) &&
+                    "-translate-x-0 -translate-y-0"
+                  }`}
+                ></span>
+                <span
+                  className={`absolute inset-0 w-full h-full  border-2 border-[#4CADDA] group-hover:bg-[#4CADDA]
+          ${isLoading || showCheckmark ? "bg-[#4CADDA]" : "bg-white"}
+          `}
+                ></span>
+                <span className="relative text-black group-hover:text-white font-display font-semibold">
+                  {isLoading || showCheckmark ? (
+                    <div>
+                      {isLoading && (
+                        <span className="relative w-full">
+                          <span className=" flex flex-row justify-center items-center transition-all duration-1000">
+                            <ColorRing
+                              visible={true}
+                              height={`${isLoading ? "32" : "0"}`}
+                              width={`${isLoading ? "32" : "0"}`}
+                              ariaLabel="blocks-loading"
+                              wrapperStyle={{}}
+                              wrapperClass="blocks-wrapper"
+                              colors={[
+                                "#ffffff",
+                                "#ffffff",
+                                "#ffffff",
+                                "#ffffff",
+                                "#ffffff",
+                              ]}
+                            />
+                          </span>
+                        </span>
+                      )}
+                      {showCheckmark && (
+                        <span className="h-[30px] w-[30px] text-white flex justify-center items-center">
+                          <svg
+                            className="checkmark"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="8 9 35 35"
+                          >
+                            <path
+                              className="checkmark__check"
+                              fill="none"
+                              d="M14.1 27.2l7.1 7.2 16.7-16.8"
+                            />
+                          </svg>
+                        </span>
+                      )}
+                    </div>
+                  ) : (
+                    <p>Comment</p>
+                  )}
+                </span>
+              </button>
+            </div>
+
+            {/* Comment Section */}
+            <div className="pt-2 flex flex-col gap-3">
+              {post?.comments
+                ?.map((comment, id) => (
+                  <div
+                    key={id}
+                    className=" flex flex-row gap-[10px] items-center"
+                  >
+                    <p className="font-semibold text-md self-start justify-start">
+                      {comment.username}
+                    </p>
+                    <div>
+                      <p className="text-sm">{comment.comment}</p>
+                      <button
+                        className={`h-4 w-8 text-xs text-[#4CADDA] mt-1 ${
+                          comment.username !== user.username && "invisible"
+                        } flex flex-row items-center justify-center`}
+                        onClick={() => deleteComment(id, comment._id)}
+                        disabled={deleteCommentLoader.includes(id)}
+                      >
+                        {deleteCommentLoader.includes(id) ? (
+                          <ColorRing
+                            visible={true}
+                            height="15"
+                            width="15"
+                            ariaLabel="blocks-loading"
+                            wrapperStyle={{}}
+                            wrapperClass="blocks-wrapper"
+                            colors={[
+                              "#4CADDA",
+                              "#4CADDA",
+                              "#4CADDA",
+                              "#4CADDA",
+                              "#4CADDA",
+                            ]}
+                          />
+                        ) : (
+                          "Delete"
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                ))
+                .reverse()}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

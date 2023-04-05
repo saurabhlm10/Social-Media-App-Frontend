@@ -65,6 +65,7 @@ const CreatePost = () => {
         dispatch(turnOffShowCheckmark());
       }, 1000);
     } catch (error) {
+      dispatch(turnOffLoading());
       console.log(error);
     }
   };
@@ -142,7 +143,6 @@ const CreatePost = () => {
                 {isLoading && (
                   <span className="relative w-full">
                     <span className=" flex flex-row justify-center items-center transition-all duration-1000">
-                      {/* <span className=" absolute top-0 left-0 bottom-0 flex items-center transition-all duration-1000"> */}
                       <ColorRing
                         visible={true}
                         height={`${isLoading ? "32" : "0"}`}
@@ -162,7 +162,6 @@ const CreatePost = () => {
                   </span>
                 )}
                 {showCheckmark && (
-                  // <span className="relative border-2">
                   <span className="h-[30px] w-[30px] text-white flex justify-center items-center">
                     <svg
                       className="checkmark"
@@ -176,7 +175,6 @@ const CreatePost = () => {
                       />
                     </svg>
                   </span>
-                  // </span>
                 )}
               </div>
             ) : (

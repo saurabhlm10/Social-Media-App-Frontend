@@ -1,11 +1,11 @@
 import axios from "axios"
 import Cookies from "js-cookie";
 
-export const deleteFromAPI = async (postId, imageName) => {
+export const deleteFromAPI = async (query) => {
     try {
         const token = Cookies.get('jwt_token')
 
-        const response = await axios.delete(`/api/deletepost/${postId}/${imageName}`,
+        const response = await axios.delete(query,
             { headers: { token } }
         );
 
