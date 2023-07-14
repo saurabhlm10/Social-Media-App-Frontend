@@ -34,7 +34,7 @@ const Posts = () => {
             <b>{post.username}</b>
           </Link>
           
-            <div className="border-r-2 border-l-2 border-gray-100">
+            <div className="border-r-2 border-l-2 pb-20 border-gray-100">
               {/* <img src={image.imageUrl} className="w-[500px] mt-4" /> */}
               <Post sentPost={post} key={id} />
             </div>

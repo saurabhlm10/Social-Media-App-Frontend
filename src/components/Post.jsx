@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense, lazy } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { getFromAPI } from "../utils/getFromAPI";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,6 +20,9 @@ import { putToAPI } from "../utils/putToAPI";
 import { postToAPI } from "../utils/postToAPI";
 import { ColorRing } from "react-loader-spinner";
 import { deleteFromAPI } from "../utils/deleteFromAPI";
+// import PostImage from "./PostImage";
+
+const PostImage = lazy(() => wait(2000).then(() => import("./PostImage")));
 
 const Post = ({ sentPost }) => {
   const [imageUrl, setImageUrl] = useState("");
@@ -126,9 +129,7 @@ const Post = ({ sentPost }) => {
       );
 
       getPost();
-      setTimeout(() => {
-        dispatch(turnOffDeleteCommentLoader(id));
-      }, 1000);
+      dispatch(turnOffDeleteCommentLoader(id));
     } catch (error) {
       console.log(error);
     }
@@ -142,7 +143,7 @@ const Post = ({ sentPost }) => {
     <div className="font-head flex flex-col items-center ">
       {deleteModalOpen && <DeleteModal postId={postId} post={post} />}
       <div
-        className={`mx-auto pb-20 relative flex flex-col justify-center pt-8 border-l-2 border-r-2 border-[#c4dfec] ${
+        className={`max-h-[600px] mx-auto  relative flex flex-col justify-center pt-8  border-[#c4dfec] ${
           sentPost ? "w-[450px]" : "w-[600px]"
         } `}
       >
@@ -151,7 +152,16 @@ const Post = ({ sentPost }) => {
             <img id="imageDiv" src={imageUrl} className="w-[450px]" />
           </Link>
         ) : (
-          <img src={imageUrl} className="w-[600px] peer" />
+          <Suspense
+            fallback={
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxABmbYpe7sHDM9AHE2MF-vheasP0F1PyzhH0wteB1Pg&s"
+                alt=""
+              />
+            }
+          >
+            <PostImage imageUrl={imageUrl} />
+          </Suspense>
         )}
 
         {/* Delete button if own post */}
@@ -320,9 +330,15 @@ const Post = ({ sentPost }) => {
                           comment.username !== user.username && "invisible"
                         } flex flex-row items-center justify-center`}
                         onClick={() => deleteComment(id, comment._id)}
-                        disabled={deleteCommentLoader && deleteCommentLoader.length > 0 && deleteCommentLoader.includes(id)}
+                        disabled={
+                          deleteCommentLoader &&
+                          deleteCommentLoader.length > 0 &&
+                          deleteCommentLoader.includes(id)
+                        }
                       >
-                        {(deleteCommentLoader && deleteCommentLoader.length > 0 && deleteCommentLoader.includes(id)) ? (
+                        {deleteCommentLoader &&
+                        deleteCommentLoader.length > 0 &&
+                        deleteCommentLoader.includes(id) ? (
                           <ColorRing
                             visible={true}
                             height="15"
@@ -353,5 +369,11 @@ const Post = ({ sentPost }) => {
     </div>
   );
 };
+
+function wait(time) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, time);
+  });
+}
 
 export default Post;

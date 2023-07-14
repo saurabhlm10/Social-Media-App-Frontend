@@ -1,20 +1,27 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import "./App.css";
 import Posts from "./components/Posts";
 import { Route, Routes, Link, useNavigate } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
-import CreatePost from "./components/CreatePost";
+// import CreatePost from "./components/CreatePost";
 import Post from "./components/Post";
-import CreateUser from "./components/CreateAccount";
-import Spinner from "./components/Spinner";
+// import CreateUser from "./components/CreateUser";
 import { useSelector, useDispatch } from "react-redux";
-import Login from "./components/Login";
+// import Login from "./components/Login";
 import Cookies from "js-cookie";
 import { turnOnLogin, setUser } from "./features/mainSlice";
 import Profile from "./components/Profile";
 import { mainState } from "./features/mainSlice";
+import Search from "./components/Search";
+// import DeleteModal from "./components/DeleteModal";
 
-import DeleteModal from "./components/DeleteModal";
+const CreateUser = lazy(() => import("./components/CreateUser"));
+
+const CreatePost = lazy(() => import("./components/CreatePost"));
+
+const Login = lazy(() => import("./components/Login"));
+
+const DeleteModal = lazy(() => import("./components/DeleteModal"));
 
 function App() {
   const { isLoggedIn, isLoading, user, deleteModalOpen, showCheckmark } =
@@ -77,7 +84,9 @@ function App() {
                   LOGO
                 </div>
               </Link>
-              <CreatePost />
+              <Suspense fallback={<h1>Loading...</h1>}>
+                <CreatePost />
+              </Suspense>
             </div>
           </>
         }
@@ -86,11 +95,18 @@ function App() {
         path="/u/:postId"
         element={
           <>
-            {deleteModalOpen && <DeleteModal />}
+            {deleteModalOpen && (
+              <Suspense fallback={<h1>Loading...</h1>}>
+                <DeleteModal />
+              </Suspense>
+            )}
             {/* <DeleteModal /> */}
             <Link to="/">
-              <div className="font-head font-semibold mt-4 ml-4 absolute text-3xl">LOGO</div>
+              <div className="font-head font-semibold mt-4 ml-4 absolute text-3xl">
+                LOGO
+              </div>
             </Link>
+            <Sidebar />
             <Post />
           </>
         }
@@ -98,29 +114,48 @@ function App() {
       <Route
         path="/u/createaccount"
         element={
-          <>
+          <Suspense fallback={<h1>Loading...</h1>}>
             <CreateUser />
-          </>
+          </Suspense>
         }
       />
       <Route
         path="/u/login"
         element={
-          <>
-            {isLoading && (
-              <div className="full-screen-loading-background">
-                <div className="pos-center">
-                  <Spinner />
-                </div>
-              </div>
-            )}
+          <Suspense fallback={<h1>Loading...</h1>}>
             <Login />
-          </>
+          </Suspense>
         }
       />
 
-      <Route path={`/:username`} element={<Profile />} />
-      <Route path="/deletemodal" element={<DeleteModal/>}/>
+      <Route
+        path={`/:username`}
+        element={
+          <>
+            <Sidebar />
+            <Profile />
+          </>
+        }
+      />
+      <Route
+        path="/deletemodal"
+        element={
+          <Suspense fallback={<h1>Loading...</h1>}>
+            <DeleteModal />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/u/search"
+        element={
+          <>
+            <Sidebar />
+            <div className="z-50">
+              <Search />
+            </div>
+          </>
+        }
+      />
     </Routes>
   );
 }
